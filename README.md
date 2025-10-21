@@ -26,7 +26,7 @@
     html,body{height:100%;margin:0;font-family:Inter, Roboto, Arial, sans-serif;color:var(--muted)}
     /* Background image (beautiful farm image). Change URL to use your own. */
     body{
-      background-image: url('https://th.bing.com/th/id/OIP.j7wtyBkgvqBa7XPiCzLalQHaDC?w=348&h=143&c=7&r=0&o=7&cb=12&dpr=1.3&pid=1.7&rm=3');
+      background-image: url('https://th.bing.com/th/id/OIP.j7wtyBkgvqBa7XPiCzLalQHaDC?w=1200&h=600&c=7&r=0&o=5&pid=1.7');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -63,7 +63,7 @@
     .video h3{margin:0 0 8px 0;font-size:1rem;color:var(--muted)}
     .thumb{position:relative;border-radius:8px;overflow:hidden;background:#000}
     .thumb img{display:block;width:100%;height:auto;object-fit:cover}
-    .play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.28));color:#fff;font-weight:700;font-size:1.2rem;cursor:pointer}
+    .play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.28));color:#fff;font-weight:700;font-size:14px;pointer-events:none}
     .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
     .link{font-size:0.9rem;color:var(--accent);text-decoration:none}
 
@@ -134,6 +134,8 @@
 
     /* focus */
     a:focus, button:focus, input:focus{outline:3px solid rgba(47,107,47,0.18);outline-offset:3px}
+
+    footer.site-footer{margin-top:18px;color:rgba(255,255,255,0.95);font-size:0.95rem;text-align:center;padding:12px}
   </style>
 </head>
 <body>
@@ -143,7 +145,7 @@
       <span style="display:inline-flex;align-items:center;gap:8px">
         <!-- simple phone icon using SVG for crispness -->
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-          <path d="M21 16.5a2 2 0 0 0-1.8-2c-1.1-.2-2.4-.3-3.7.2-.4.1-.8 0-1.1-.2l-2.1-1.6a16.2 16.2 0 0 1-3.1-3.1L9.1 7.8c-.3-.3-.4-.7-.2-1.1.5-1.3.4-2.6.2-3.7A2 2 0 0 0 7 1.8 2 2 0 0 0 4.5 3C3 6.3 4.7 11.1 8 14.4c3.3 3.3 8.1 5 11.4 3.5a2 2 0 0 0 1.1-2.4z" fill="#2f6b2f"/>
+          <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57.12.35 0 .74-.24 1.01l-2.21 2.21z" fill="currentColor"/>
         </svg>
         <span>+998 94 258 60 45</span>
       </span>
@@ -178,10 +180,10 @@
       <div class="logo">Fermerlik Darslari</div>
       <p style="margin:0 0 8px 0;color:rgba(255,255,255,0.9)">Amaliy va nazariy videolar</p>
       <nav aria-label="Kategoriyalar" id="category-nav">
-        <a href="#" class="sidebar-link active" data-category="livestock">Dehqonchilik</a>
-        <a href="#" class="sidebar-link" data-category="crop-farming">Dehqonchilik</a>
-        <a href="#" class="sidebar-link" data-category="vegetable-farming">Sabzavotchilik</a>
-        <a href="#" class="sidebar-link" data-category="fruit-farming">Meva Yetishtirish</a>
+        <a href="#" class="sidebar-link active" data-category="dehqonchilik">Dehqonchilik</a>
+        <a href="#" class="sidebar-link" data-category="chorvachilik">Chorvachilik</a>
+        <a href="#" class="sidebar-link" data-category="parrandachilik">Parrandachilik</a>
+        <a href="#" class="sidebar-link" data-category="bogbonchilik">Bog'bonchilik</a>
       </nav>
     </aside>
 
@@ -198,34 +200,37 @@
         <div style="margin:10px 0;color:rgba(255,255,255,0.9);font-size:0.95rem" id="status">Yuklanmoqda...</div>
         <div id="video-list" class="video-list" aria-live="polite"></div>
       </section>
+
+      <footer class="site-footer" id="siteFooter">Bekjonni tog'alari uchun taxlagan sayti</footer>
     </main>
   </div>
 
   <script>
     (function(){
-      // Keep previous app functionality (simplified fallback)
+      // Fallback videos grouped by the requested categories.
       const fallback = {
-        "livestock": [
-          { "title": "1-dars", "link": "https://youtu.com/Wz3G2MAx_rw?si=5znLP4OGrm7WXDLM" },
-          { "title": "2-dars", "link": "https://www.youtube.com/live/1WWM53nZGcU?si=wtwsPSNgPbib3Lpk" }
+        "dehqonchilik": [
+          { "title": "Dehqonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=2Vv-BfVoq4g" },
+          { "title": "Dehqonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=kJQP7kiw5Fk" }
         ],
-        "crop-farming": [
-          { "title": "1-dars", "link": "https://www.youtube.com/watch?v=2Vv-BfVoq4g" },
-          { "title": "2-dars", "link": "https://www.youtube.com/watch?v=kJQP7kiw5Fk" }
+        "chorvachilik": [
+          { "title": "Chorvachilik: 1-dars", "link": "https://www.youtube.com/watch?v=3tmd-ClpJxA" },
+          { "title": "Chorvachilik: 2-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
         ],
-        "vegetable-farming": [
-          { "title": "1-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
-           { "title": "2-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
+        "parrandachilik": [
+          { "title": "Parrandachilik: 1-dars", "link": "https://www.youtube.com/watch?v=09R8_2nJtjg" },
+          { "title": "Parrandachilik: 2-dars", "link": "https://www.youtube.com/watch?v=RgKAFK5djSk" }
         ],
-        "fruit-farming": [
-          { "title": "1-dars", "link": "https://www.youtube.com/watch?v=09R8_2nJtjg" } 
-          { "title": "2-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
+        "bogbonchilik": [
+          { "title": "Bog'bonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=2vjPBrBU-TM" },
+          { "title": "Bog'bonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=YQHsXMglC9A" }
         ]
       };
 
       const statusEl = document.getElementById('status');
       let videosData = fallback;
 
+      // Try to fetch videos.json to allow dynamic updates; otherwise use fallback
       fetch('videos.json').then(r => {
         if(!r.ok) throw new Error('No videos.json');
         return r.json();
@@ -258,7 +263,7 @@
           link.addEventListener('keydown', (e) => { if(e.key==='Enter') link.click(); });
         });
 
-        const firstCategory = links[0]?.dataset.category || 'livestock';
+        const firstCategory = links[0]?.dataset.category || 'dehqonchilik';
         categoryTitle.textContent = links[0]?.textContent || 'Kategoriya';
         loadVideos(firstCategory);
 
@@ -277,12 +282,22 @@
       function youtubeIdFromUrl(url){
         try{
           const u = new URL(url);
-          if(u.hostname.includes('youtube.com')){
-            if(u.pathname.startsWith('/watch')) return u.searchParams.get('v');
-            if(u.pathname.startsWith('/embed/')) return u.pathname.split('/embed/')[1];
-            return null;
+          const host = u.hostname.toLowerCase();
+          // prefer v param if available
+          const v = u.searchParams.get('v');
+          if(v) return v;
+          if(host.includes('youtu.be')){
+            return u.pathname.slice(1);
           }
-          if(u.hostname === 'youtu.be') return u.pathname.slice(1);
+          if(host.includes('youtube') || host.includes('youtu')){
+            // check embed path
+            if(u.pathname.startsWith('/embed/')) return u.pathname.split('/embed/')[1];
+            // some youtube live or other short paths might include id as last segment
+            const parts = u.pathname.split('/').filter(Boolean);
+            const last = parts[parts.length - 1] || '';
+            // basic heuristic: YouTube ids are typically 11 chars but can vary; return last segment if plausible
+            if(last.length >= 6 && last.length <= 64) return last;
+          }
         }catch(e){
           return url;
         }
@@ -334,8 +349,8 @@
               window.open(video.link, '_blank', 'noopener');
               return;
             }
-            const src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-            // open in new tab (keeps page lightweight) or you can implement modal playback if you prefer
+            const src = `https://www.youtube.com/watch?v=${id}`;
+            // open in new tab for simplicity
             window.open(src, '_blank', 'noopener');
           }
 
