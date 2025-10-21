@@ -7,27 +7,50 @@
   <meta name="description" content="Fermerlik darslari: chorva, dehqonchilik, sabzavotchilik va meva yetishtirish bo'yicha amaliy videolar to'plami." />
   <style>
     :root{
-      --bg:#f6f8f1;
       --accent:#2f6b2f;
-      --muted:#6b6b6b;
-      --card:#ffffff;
+      --muted:#333;
+      --card:#ffffffcc;
+      --glass: rgba(255,255,255,0.08);
       --radius:10px;
       --gap:14px;
     }
     @media (prefers-color-scheme:dark){
       :root{
-        --bg:#0f1110;
         --accent:#6bb46b;
-        --muted:#9aa0a8;
-        --card:#121416;
+        --muted:#ddd;
+        --card:#0f1114cc;
+        --glass: rgba(0,0,0,0.25);
       }
     }
+
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter, Roboto, Arial, sans-serif;background:var(--bg);color:var(--muted)}
-    .app{display:flex;min-height:100vh;gap:0}
+    html,body{height:100%;margin:0;font-family:Inter, Roboto, Arial, sans-serif;color:var(--muted)}
+    /* Background image (beautiful farm image). Change URL to use your own. */
+    body{
+      background-image: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1900&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+    }
+    /* subtle overlay for readability */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(255,255,255,0.04));
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .app{display:flex;min-height:100vh;gap:0;position:relative;z-index:1}
     .sidebar{
-      width:260px;background:linear-gradient(180deg,var(--accent),#1f4f1f);color:#fff;padding:18px;flex-shrink:0;
+      width:260px;padding:18px;flex-shrink:0;
       display:flex;flex-direction:column;gap:12px;
+      background: linear-gradient(180deg, rgba(47,107,47,0.95), rgba(31,79,31,0.95));
+      color:#fff;
+      border-right: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
     }
     .logo{font-weight:700;font-size:1.1rem}
     nav a{color:inherit;text-decoration:none;padding:8px;border-radius:8px;display:block}
@@ -36,40 +59,122 @@
     header.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
     .controls{display:flex;gap:10px;align-items:center}
     .search{padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);min-width:180px}
-    .phone-icon{background:#fff;color:var(--accent);border-radius:8px;padding:8px 10px;border:none;cursor:pointer}
     .video-list{display:grid;gap:var(--gap);grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-    .video{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);color:initial}
-    .video h3{margin:0 0 8px 0;font-size:1rem;color:inherit}
+    .video{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+    .video h3{margin:0 0 8px 0;font-size:1rem;color:var(--muted)}
     .thumb{position:relative;border-radius:8px;overflow:hidden;background:#000}
     .thumb img{display:block;width:100%;height:auto;object-fit:cover}
-    .play-btn{
-      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.28));
-      color:#fff;font-weight:700;font-size:1.2rem;cursor:pointer;backdrop-filter:blur(2px)
-    }
+    .play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.28));color:#fff;font-weight:700;font-size:1.2rem;cursor:pointer}
     .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
     .link{font-size:0.9rem;color:var(--accent);text-decoration:none}
-    /* Mobile */
-    .hamburger{display:none;background:transparent;border:0;color:var(--muted);font-weight:700;padding:8px;cursor:pointer}
+
+    /* Floating call widget: top-right */
+    .call-widget{
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:80;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      font-family:inherit;
+    }
+    .call-button{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:linear-gradient(180deg,#ffffffaa, #ffffff88);
+      color:var(--accent);
+      padding:10px 12px;
+      border-radius:999px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+      border: none;
+      cursor: pointer;
+      font-weight:700;
+      backdrop-filter: blur(4px);
+    }
+    .call-button small{display:block;font-size:0.85rem;color:rgba(0,0,0,0.7)}
+    .call-label{
+      font-size:0.85rem;
+      color:#fff;
+      background: rgba(0,0,0,0.36);
+      padding:4px 8px;
+      border-radius:8px;
+      cursor:pointer;
+      user-select:none;
+    }
+    /* panel that appears under "Call" label */
+    .call-panel{
+      margin-top:8px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.88));
+      color:var(--muted);
+      border-radius:10px;
+      padding:10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      display:none;
+      min-width:220px;
+      text-align:left;
+    }
+    .call-panel.open{display:block}
+    .call-option{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;cursor:pointer;background:transparent}
+    .call-option:hover{background:rgba(0,0,0,0.04)}
+    .call-option a{color:var(--accent);text-decoration:none;font-weight:600}
+    .call-meta{font-size:0.85rem;color:rgba(0,0,0,0.6)}
+
+    /* small close button in panel */
+    .call-close{background:transparent;border:0;color:var(--muted);cursor:pointer;font-weight:700;padding:6px}
+
+    /* mobile adjustments */
     @media (max-width:800px){
       .sidebar{position:fixed;left:-320px;top:0;height:100%;z-index:40;transition:left .22s}
       .sidebar.open{left:0}
-      .app{padding-left:0}
-      .hamburger{display:inline-block}
+      .call-widget{right:12px;top:12px}
+      .call-panel{min-width:180px}
     }
-    /* toast */
-    .toast{position:fixed;right:16px;bottom:16px;background:#111;color:#fff;padding:10px 14px;border-radius:8px;display:none;z-index:60}
-    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
     /* focus */
     a:focus, button:focus, input:focus{outline:3px solid rgba(47,107,47,0.18);outline-offset:3px}
-    /* responsive iframe modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50;display:none}
-    .modal.open{display:flex}
-    .modal-content{width:min(1000px,95%);aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
-    .modal-close{position:absolute;right:18px;top:18px;background:#fff;border-radius:6px;padding:6px;border:0;cursor:pointer}
   </style>
 </head>
 <body>
-  <div class="app">
+  <!-- Floating call widget placed at top-right -->
+  <div class="call-widget" id="callWidget" aria-live="polite">
+    <button class="call-button" id="callButton" aria-haspopup="true" aria-expanded="false" title="Qo'ng'iroq">
+      <span style="display:inline-flex;align-items:center;gap:8px">
+        <!-- simple phone icon using SVG for crispness -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M21 16.5a2 2 0 0 0-1.8-2c-1.1-.2-2.4-.3-3.7.2-.4.1-.8 0-1.1-.2l-2.1-1.6a16.2 16.2 0 0 1-3.1-3.1L9.1 7.8c-.3-.3-.4-.7-.2-1.1.5-1.3.4-2.6.2-3.7A2 2 0 0 0 7 1.8 2 2 0 0 0 4.5 3C3 6.3 4.7 11.1 8 14.4c3.3 3.3 8.1 5 11.4 3.5a2 2 0 0 0 1.1-2.4z" fill="#2f6b2f"/>
+        </svg>
+        <span>+998 94 258 60 45</span>
+      </span>
+      <small style="margin-left:6px">CALL</small>
+    </button>
+
+    <!-- a visible label under button which also toggles the panel -->
+    <div id="callLabel" class="call-label" role="button" tabindex="0" aria-controls="callPanel" aria-expanded="false">Call</div>
+
+    <!-- hidden panel shown when pressing label -->
+    <div id="callPanel" class="call-panel" role="dialog" aria-hidden="true" aria-label="Call options">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <strong>Bog'lanish</strong>
+        <button class="call-close" id="callPanelClose" aria-label="Yopish">✕</button>
+      </div>
+      <div class="call-option" id="makeCall">
+        <span>To'g'ridan-to'g'ri qo'ng'iroq</span>
+        <a href="tel:+998942586045" id="telLink">Call</a>
+      </div>
+      <div class="call-option" id="copyNumber" style="margin-top:6px">
+        <span>Raqamni nusxalash</span>
+        <button id="copyBtn" class="call-close" aria-label="Nusxalash">Copy</button>
+      </div>
+      <div style="margin-top:8px;font-size:0.9rem;color:rgba(0,0,0,0.6)">
+        Qo'ng'iroq ishlamasa, raqamni nusxalab telefoningizdan qo'ng'iroq qiling.
+      </div>
+    </div>
+  </div>
+
+  <div class="app" id="app">
     <aside class="sidebar" id="sidebar" aria-label="Bosh sahifa menyusi">
       <div class="logo">Fermerlik Darslari</div>
       <p style="margin:0 0 8px 0;color:rgba(255,255,255,0.9)">Amaliy va nazariy videolar</p>
@@ -79,46 +184,27 @@
         <a href="#" class="sidebar-link" data-category="vegetable-farming">Sabzavotchilik</a>
         <a href="#" class="sidebar-link" data-category="fruit-farming">Meva Yetishtirish</a>
       </nav>
-      <div style="margin-top:auto;font-size:0.9rem">
-        <div>Bog'lanish:</div>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
-          <a href="tel:+998942586045" class="link" id="phone-link">+998 94 258 60 45</a>
-          <button class="phone-icon" id="phone-copy" aria-label="Telefon raqamini nusxalash">Nusxa</button>
-        </div>
-      </div>
     </aside>
 
-    <main class="main">
+    <main class="main" id="main">
       <header class="header">
-        <div style="display:flex;align-items:center;gap:10px">
-          <button class="hamburger" id="hamburger" aria-controls="sidebar" aria-expanded="false" aria-label="Menyuni ochish">☰</button>
-          <div><strong id="category-title">Kategoriya</strong></div>
-        </div>
-
+        <div><strong id="category-title">Kategoriya</strong></div>
         <div class="controls" role="search" aria-label="Videolarni qidirish">
           <input id="search" class="search" placeholder="Video nomi bo'yicha izlash..." aria-label="Qidiruv" />
-          <button class="phone-icon" id="phone-icon" title="Bog'lanish">+998 94 258 60 45</button>
         </div>
       </header>
 
       <section>
         <h2 id="section-title">Videolar</h2>
-        <div style="margin:10px 0;color:var(--muted);font-size:0.95rem" id="status">Yuklanmoqda...</div>
+        <div style="margin:10px 0;color:rgba(255,255,255,0.9);font-size:0.95rem" id="status">Yuklanmoqda...</div>
         <div id="video-list" class="video-list" aria-live="polite"></div>
       </section>
     </main>
   </div>
 
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Video oynasi">
-    <div class="modal-content" id="modal-content" tabindex="0"></div>
-    <button class="modal-close" id="modal-close" aria-label="Yopish">✕</button>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
   <script>
     (function(){
-      // Inline fallback data, but app will try to fetch videos.json first.
+      // Keep previous app functionality (simplified fallback)
       const fallback = {
         "livestock": [
           { "title": "Introduction to Livestock Farming", "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
@@ -139,14 +225,13 @@
       const statusEl = document.getElementById('status');
       let videosData = fallback;
 
-      // Try to fetch videos.json if present (CORS-friendly when served from same origin)
       fetch('videos.json').then(r => {
         if(!r.ok) throw new Error('No videos.json');
         return r.json();
       }).then(json => {
         videosData = json;
       }).catch(()=> {
-        // keep fallback
+        // fallback stays
       }).finally(()=> {
         statusEl.textContent = '';
         init();
@@ -156,17 +241,8 @@
       const listEl = document.getElementById('video-list');
       const categoryTitle = document.getElementById('category-title');
       const searchEl = document.getElementById('search');
-      const sidebar = document.getElementById('sidebar');
-      const hamburger = document.getElementById('hamburger');
-      const phoneCopy = document.getElementById('phone-copy');
-      const phoneIcon = document.getElementById('phone-icon');
-      const modal = document.getElementById('modal');
-      const modalContent = document.getElementById('modal-content');
-      const modalClose = document.getElementById('modal-close');
-      const toast = document.getElementById('toast');
 
       function init(){
-        // Setup category links
         links.forEach(link => {
           link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -176,14 +252,11 @@
             categoryTitle.textContent = link.textContent;
             searchEl.value = '';
             loadVideos(cat);
-            closeSidebarOnMobile();
           });
-          // keyboard accessibility
           link.setAttribute('tabindex','0');
           link.addEventListener('keydown', (e) => { if(e.key==='Enter') link.click(); });
         });
 
-        // default
         const firstCategory = links[0]?.dataset.category || 'livestock';
         categoryTitle.textContent = links[0]?.textContent || 'Kategoriya';
         loadVideos(firstCategory);
@@ -193,45 +266,6 @@
           const cat = active?.dataset.category || firstCategory;
           loadVideos(cat, searchEl.value.trim());
         });
-
-        phoneCopy.addEventListener('click', () => {
-          const tel = '+998 94 258 60 45';
-          navigator.clipboard?.writeText(tel).then(() => showToast('Telefon raqami nusxalandi')).catch(() => {
-            // fallback select
-            showToast('Nusxalash muammosi, iltimos qo\'lda nusxa oling');
-          });
-        });
-
-        phoneIcon.addEventListener('click', ()=> showToast('Telefon: +998 94 258 60 45'));
-
-        // mobile hamburger
-        hamburger.addEventListener('click', () => {
-          const isOpen = sidebar.classList.toggle('open');
-          hamburger.setAttribute('aria-expanded', String(isOpen));
-        });
-
-        // modal controls
-        modalClose.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
-        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
-
-        // improve keyboard focus behavior
-        modalContent.addEventListener('keydown', (e)=> {
-          if(e.key === 'Tab') e.stopPropagation();
-        });
-      }
-
-      function closeSidebarOnMobile(){
-        if(window.innerWidth <= 800){
-          sidebar.classList.remove('open');
-          hamburger.setAttribute('aria-expanded','false');
-        }
-      }
-
-      function showToast(text, ms = 2600){
-        toast.textContent = text;
-        toast.style.display = 'block';
-        setTimeout(()=> { toast.style.display = 'none'; }, ms);
       }
 
       function loadVideos(category, filter=''){
@@ -239,7 +273,6 @@
         displayVideos(videos, category);
       }
 
-      // Utility: extract YouTube video id from many URL forms
       function youtubeIdFromUrl(url){
         try{
           const u = new URL(url);
@@ -250,7 +283,6 @@
           }
           if(u.hostname === 'youtu.be') return u.pathname.slice(1);
         }catch(e){
-          // may be an id already
           return url;
         }
         return null;
@@ -262,10 +294,10 @@
         return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
       }
 
-      function displayVideos(videos, category){
+      function displayVideos(videos){
         listEl.innerHTML = '';
         if(!videos || videos.length === 0){
-          listEl.innerHTML = '<p>Bu kategoriyada video yo‘q.</p>';
+          listEl.innerHTML = '<p style="color:rgba(255,255,255,0.9)">Bu kategoriyada video yo‘q.</p>';
           return;
         }
         videos.forEach(video => {
@@ -275,7 +307,6 @@
 
           const title = document.createElement('h3');
           title.textContent = video.title;
-          title.id = 'title-' + Math.random().toString(36).slice(2,9);
 
           const thumbWrap = document.createElement('div');
           thumbWrap.className = 'thumb';
@@ -296,18 +327,15 @@
           thumbWrap.appendChild(thumbImg);
           thumbWrap.appendChild(playBtn);
 
-          // click or enter loads real iframe in modal (lazy load)
           function openVideo(){
             const id = youtubeIdFromUrl(video.link);
             if(!id){
-              // open raw link new tab if not youtube
               window.open(video.link, '_blank', 'noopener');
               return;
             }
             const src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-            modalContent.innerHTML = `<iframe src="${src}" title="${escapeHtml(video.title)}" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            modal.classList.add('open');
-            modalContent.focus();
+            // open in new tab (keeps page lightweight) or you can implement modal playback if you prefer
+            window.open(src, '_blank', 'noopener');
           }
 
           thumbWrap.addEventListener('click', openVideo);
@@ -317,7 +345,6 @@
           meta.className = 'meta';
 
           const externalLink = document.createElement('a');
-          // make a watch url to open on youtube directly
           const id = youtubeIdFromUrl(video.link);
           externalLink.href = id ? `https://www.youtube.com/watch?v=${id}` : video.link;
           externalLink.target = '_blank';
@@ -335,14 +362,94 @@
         });
       }
 
-      function closeModal(){
-        modal.classList.remove('open');
-        modalContent.innerHTML = '';
+      /* -------------------------
+         Call widget behavior
+         ------------------------- */
+      const callLabel = document.getElementById('callLabel');
+      const callPanel = document.getElementById('callPanel');
+      const callPanelClose = document.getElementById('callPanelClose');
+      const copyBtn = document.getElementById('copyBtn');
+      const callButton = document.getElementById('callButton');
+      const telLink = document.getElementById('telLink');
+
+      function toggleCallPanel(open){
+        const isOpen = typeof open === 'boolean' ? open : !callPanel.classList.contains('open');
+        if(isOpen){
+          callPanel.classList.add('open');
+          callPanel.setAttribute('aria-hidden','false');
+          callLabel.setAttribute('aria-expanded','true');
+          callButton.setAttribute('aria-expanded','true');
+          // focus first actionable element for keyboard users
+          copyBtn.focus();
+        } else {
+          callPanel.classList.remove('open');
+          callPanel.setAttribute('aria-hidden','true');
+          callLabel.setAttribute('aria-expanded','false');
+          callButton.setAttribute('aria-expanded','false');
+        }
       }
 
-      // small helper to sanitize title in attribute
-      function escapeHtml(s){
-        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      callLabel.addEventListener('click', ()=> toggleCallPanel());
+      callLabel.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCallPanel(); }});
+      callButton.addEventListener('click', ()=> {
+        // open phone dialer on supported devices
+        window.location.href = 'tel:+998942586045';
+      });
+
+      callPanelClose.addEventListener('click', ()=> toggleCallPanel(false));
+
+      // copy number
+      copyBtn.addEventListener('click', () => {
+        const tel = '+998 94 258 60 45';
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(tel).then(() => {
+            showTempMessage('Raqam nusxalandi');
+          }).catch(() => {
+            showTempMessage('Nusxalash imkoni yo‘q — qo‘lda nusxa oling');
+          });
+        } else {
+          // fallback
+          const ta = document.createElement('textarea');
+          ta.value = tel;
+          document.body.appendChild(ta);
+          ta.select();
+          try{
+            document.execCommand('copy');
+            showTempMessage('Raqam nusxalandi');
+          }catch(e){
+            showTempMessage('Nusxalash imkoni yo‘q — qo‘lda nusxa oling');
+          }
+          ta.remove();
+        }
+      });
+
+      // close panel when clicking outside
+      document.addEventListener('click', (e) => {
+        const path = e.composedPath ? e.composedPath() : (e.path || []);
+        if(!path.includes(document.getElementById('callWidget')) && callPanel.classList.contains('open')){
+          toggleCallPanel(false);
+        }
+      });
+
+      // ESC to close
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape') toggleCallPanel(false);
+      });
+
+      function showTempMessage(msg, ms = 2000){
+        // tiny ephemeral message near the call widget
+        const el = document.createElement('div');
+        el.textContent = msg;
+        el.style.position = 'fixed';
+        el.style.right = '18px';
+        el.style.top = '86px';
+        el.style.background = 'rgba(0,0,0,0.75)';
+        el.style.color = '#fff';
+        el.style.padding = '8px 12px';
+        el.style.borderRadius = '8px';
+        el.style.zIndex = 90;
+        document.body.appendChild(el);
+        setTimeout(()=> el.remove(), ms);
       }
 
     })();
