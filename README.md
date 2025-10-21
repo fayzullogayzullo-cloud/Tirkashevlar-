@@ -206,7 +206,7 @@
       // Keep previous app functionality (simplified fallback)
       const fallback = {
         "livestock": [
-          { "title": "1-dars", "link": "https://youtu.be/Wz3G2MAx_rw?si=5znLP4OGrm7WXDLM" },
+          { "title": "1-dars", "link": "https://youtu.com/Wz3G2MAx_rw?si=5znLP4OGrm7WXDLM" },
           { "title": "2-dars", "link": "https://www.youtube.com/live/1WWM53nZGcU?si=wtwsPSNgPbib3Lpk" }
         ],
         "crop-farming": [
