@@ -27,7 +27,7 @@
     html,body{height:100%;margin:0;font-family:Inter, Roboto, Arial, sans-serif;color:var(--muted)}
     /* Background image (beautiful farm image). Change URL to use your own. */
     body{
-      background-image: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1900&q=80');
+      background-image: url(https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1900&q=80);
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
