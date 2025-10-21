@@ -1,2 +1,2 @@
-# fermerlik-sari-yo-l
+# fermerlik-sari-yo`l
 bilimli odam bilimsizligini biladi.
