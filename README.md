@@ -179,7 +179,7 @@
       <div class="logo">Fermerlik Darslari</div>
       <p style="margin:0 0 8px 0;color:rgba(255,255,255,0.9)">Amaliy va nazariy videolar</p>
       <nav aria-label="Kategoriyalar" id="category-nav">
-        <a href="#" class="sidebar-link active" data-category="livestock">Chorva Dehqonchilik</a>
+        <a href="#" class="sidebar-link active" data-category="livestock">Dehqonchilik</a>
         <a href="#" class="sidebar-link" data-category="crop-farming">Dehqonchilik</a>
         <a href="#" class="sidebar-link" data-category="vegetable-farming">Sabzavotchilik</a>
         <a href="#" class="sidebar-link" data-category="fruit-farming">Meva Yetishtirish</a>
@@ -207,18 +207,20 @@
       // Keep previous app functionality (simplified fallback)
       const fallback = {
         "livestock": [
-          { "title": "Introduction to Livestock Farming", "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-          { "title": "Livestock Management Basics", "link": "https://www.youtube.com/watch?v=3JZ_D3ELwOQ" }
+          { "title": "1-dars", "link": "https://youtu.be/Wz3G2MAx_rw?si=5znLP4OGrm7WXDLM" },
+          { "title": "2-dars", "link": "https://www.youtube.com/live/1WWM53nZGcU?si=wtwsPSNgPbib3Lpk" }
         ],
         "crop-farming": [
-          { "title": "Basics of Crop Farming", "link": "https://www.youtube.com/watch?v=2Vv-BfVoq4g" },
-          { "title": "Effective Crop Techniques", "link": "https://www.youtube.com/watch?v=kJQP7kiw5Fk" }
+          { "title": "1-dars", "link": "https://www.youtube.com/watch?v=2Vv-BfVoq4g" },
+          { "title": "2-dars", "link": "https://www.youtube.com/watch?v=kJQP7kiw5Fk" }
         ],
         "vegetable-farming": [
-          { "title": "Vegetable Garden Tips", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
+          { "title": "1-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
+           { "title": "2-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
         ],
         "fruit-farming": [
-          { "title": "Fruit Tree Care", "link": "https://www.youtube.com/watch?v=09R8_2nJtjg" }
+          { "title": "1-dars", "link": "https://www.youtube.com/watch?v=09R8_2nJtjg" } 
+          { "title": "2-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
         ]
       };
 
