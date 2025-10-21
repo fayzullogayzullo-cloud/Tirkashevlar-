@@ -23,7 +23,7 @@
       }
     }
 
-    *{box-sizing:border-box}
+    {box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter, Roboto, Arial, sans-serif;color:var(--muted)}
     /* Background image (beautiful farm image). Change URL to use your own. */
     body{
