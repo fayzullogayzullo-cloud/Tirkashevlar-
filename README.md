@@ -210,7 +210,7 @@
       // Fallback videos grouped by the requested categories.
       const fallback = {
         "dehqonchilik": [
-          { "title": "Dehqonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=2Vv-BfVoq4g" },
+          { "title": "Dehqonchilik: 1-dars", "link": "https://youtu.be/gq0gz8LUR2g?si=nrq6i1edPgunggNQ" },
           { "title": "Dehqonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=kJQP7kiw5Fk" }
         ],
         "chorvachilik": [
