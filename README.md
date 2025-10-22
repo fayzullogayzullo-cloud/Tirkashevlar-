@@ -258,20 +258,20 @@
       // Fallback videos grouped by the requested categories.
       const fallback = {
         "dehqonchilik": [
-          { "title": "Dehqonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=2Vv-BfVoq4g" },
-          { "title": "Dehqonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=kJQP7kiw5Fk" }
+          { "title": "Dehqonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=gq0gz8LUR2g&t=337s" },
+          { "title": "Dehqonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=wCci8fDpnP4" }
         ],
         "chorvachilik": [
-          { "title": "Chorvachilik: 1-dars", "link": "https://www.youtube.com/watch?v=3tmd-ClpJxA" },
-          { "title": "Chorvachilik: 2-dars", "link": "https://www.youtube.com/watch?v=VbfpW0pbvaU" }
+          { "title": "Chorvachilik: 1-dars", "link": "https://www.youtube.com/watch?v=qR9JoDxyL5g" },
+          { "title": "Chorvachilik: 2-dars", "link": "https://www.youtube.com/watch?v=Wz3G2MAx_rw&t=961s" }
         ],
         "parrandachilik": [
-          { "title": "Parrandachilik: 1-dars", "link": "https://www.youtube.com/watch?v=09R8_2nJtjg" },
-          { "title": "Parrandachilik: 2-dars", "link": "https://www.youtube.com/watch?v=RgKAFK5djSk" }
+          { "title": "Parrandachilik: 1-dars", "link": "https://www.youtube.com/watch?v=Gyd1zbNn3d4" },
+          { "title": "Parrandachilik: 2-dars", "link": "https://www.youtube.com/watch?v=iwPRMuh6flk&t=1510s" }
         ],
         "bogbonchilik": [
-          { "title": "Bog'bonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=2vjPBrBU-TM" },
-          { "title": "Bog'bonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=YQHsXMglC9A" }
+          { "title": "Bog'bonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=SLHSuSyKpuM&list=PLLu3bYHAYRdJFWoUcCASaISXromL-uI3N" },
+          { "title": "Bog'bonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=lAfvz4gWqE4" }
         ]
       };
 
