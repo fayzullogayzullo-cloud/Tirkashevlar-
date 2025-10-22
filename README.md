@@ -67,6 +67,43 @@
     .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
     .link{font-size:0.9rem;color:var(--accent);text-decoration:none}
 
+    /* Modal / embedded player styles */
+    .video-modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,0.75);
+      z-index:120;
+      padding:20px;
+    }
+    .video-modal.open{display:flex}
+    .video-modal-content{
+      width:min(1100px,95%);
+      max-width:1100px;
+      aspect-ratio:16/9;
+      background:transparent;
+      position:relative;
+      border-radius:8px;
+      overflow:hidden;
+      box-shadow:0 10px 40px rgba(0,0,0,0.6);
+    }
+    .video-frame iframe{width:100%;height:100%;border:0;display:block}
+    .modal-close{
+      position:absolute;
+      top:8px;
+      right:8px;
+      background: rgba(255,255,255,0.9);
+      color:var(--accent);
+      border:0;
+      padding:6px 10px;
+      border-radius:6px;
+      font-weight:700;
+      cursor:pointer;
+      z-index:2;
+    }
+
     /* Floating call widget: top-right */
     .call-widget{
       position:fixed;
@@ -130,6 +167,7 @@
       .sidebar.open{left:0}
       .call-widget{right:12px;top:12px}
       .call-panel{min-width:180px}
+      .video-modal-content{width:95%;aspect-ratio:16/9}
     }
 
     /* focus */
@@ -205,12 +243,22 @@
     </main>
   </div>
 
+  <!-- Modal for embedded playback (opens inside the page instead of navigating to youtube.com) -->
+  <div id="playerModal" class="video-modal" aria-hidden="true">
+    <div class="video-modal-content" role="dialog" aria-modal="true" aria-label="Video pleer">
+      <button id="modalClose" class="modal-close" aria-label="Yopish">✕</button>
+      <div class="video-frame">
+        <iframe id="modalIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
   <script>
     (function(){
       // Fallback videos grouped by the requested categories.
       const fallback = {
         "dehqonchilik": [
-          { "title": "Dehqonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=gq0gz8LUR2g" },
+          { "title": "Dehqonchilik: 1-dars", "link": "https://www.youtube.com/watch?v=2Vv-BfVoq4g" },
           { "title": "Dehqonchilik: 2-dars", "link": "https://www.youtube.com/watch?v=kJQP7kiw5Fk" }
         ],
         "chorvachilik": [
@@ -248,6 +296,11 @@
       const categoryTitle = document.getElementById('category-title');
       const searchEl = document.getElementById('search');
 
+      // Modal elements
+      const playerModal = document.getElementById('playerModal');
+      const modalIframe = document.getElementById('modalIframe');
+      const modalClose = document.getElementById('modalClose');
+
       function init(){
         links.forEach(link => {
           link.addEventListener('click', (e) => {
@@ -272,6 +325,14 @@
           const cat = active?.dataset.category || firstCategory;
           loadVideos(cat, searchEl.value.trim());
         });
+
+        // modal close handlers
+        modalClose.addEventListener('click', closeModal);
+        playerModal.addEventListener('click', (e) => {
+          // close when clicking outside the content
+          if(e.target === playerModal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
       }
 
       function loadVideos(category, filter=''){
@@ -292,10 +353,8 @@
           if(host.includes('youtube') || host.includes('youtu')){
             // check embed path
             if(u.pathname.startsWith('/embed/')) return u.pathname.split('/embed/')[1];
-            // some youtube live or other short paths might include id as last segment
             const parts = u.pathname.split('/').filter(Boolean);
             const last = parts[parts.length - 1] || '';
-            // basic heuristic: YouTube ids are typically 11 chars but can vary; return last segment if plausible
             if(last.length >= 6 && last.length <= 64) return last;
           }
         }catch(e){
@@ -346,14 +405,29 @@
           function openVideo(){
             const id = youtubeIdFromUrl(video.link);
             if(!id){
+              // if not a youtube link, open in new tab
               window.open(video.link, '_blank', 'noopener');
               return;
             }
-            const src = `https://www.youtube.com/watch?v=${id}`;
-            // open in new tab for simplicity
-            window.open(src, '_blank', 'noopener');
+            // open modal and set iframe src to embed URL with autoplay
+            const embedSrc = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+            modalIframe.src = embedSrc;
+            playerModal.classList.add('open');
+            playerModal.setAttribute('aria-hidden', 'false');
+            // focus close button for accessibility
+            modalClose.focus();
           }
 
+          function closeModal(){
+            // helper inside scope to ensure proper reference
+            modalIframe.src = '';
+            playerModal.classList.remove('open');
+            playerModal.setAttribute('aria-hidden', 'true');
+          }
+
+          // Hook global closeModal reference used above
+          // (we also define top-level closeModal below for keyboard/Escape handlers)
+          // But ensure each thumbWrap click calls the openVideo declared here.
           thumbWrap.addEventListener('click', openVideo);
           thumbWrap.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openVideo(); } });
 
@@ -439,7 +513,7 @@
         }
       });
 
-      // close panel when clicking outside
+      // close call panel when clicking outside
       document.addEventListener('click', (e) => {
         const path = e.composedPath ? e.composedPath() : (e.path || []);
         if(!path.includes(document.getElementById('callWidget')) && callPanel.classList.contains('open')){
@@ -447,7 +521,7 @@
         }
       });
 
-      // ESC to close
+      // ESC to close call panel
       document.addEventListener('keydown', (e) => {
         if(e.key === 'Escape') toggleCallPanel(false);
       });
@@ -468,7 +542,18 @@
         setTimeout(()=> el.remove(), ms);
       }
 
+      // Top-level closeModal used for modal keyboard handling
+      function closeModal(){
+        modalIframe.src = '';
+        playerModal.classList.remove('open');
+        playerModal.setAttribute('aria-hidden', 'true');
+      }
+
+      // ensure modalClose works (also attached inside init)
+      modalClose.addEventListener('click', closeModal);
+
     })();
   </script>
 </body>
 </html>
+```
